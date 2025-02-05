@@ -19,11 +19,12 @@ const Login = () => {
 
     if (response.ok) {
       // Handle successful login
-      console.log("Login successful");
+      const data = await response.json();
+      localStorage.setItem("token", data.token);
     } else {
       // Handle login error
-      const errorMessage = await response.text();
-      setError(errorMessage);
+      const errorMessage = await response.json();
+      setError(errorMessage.message);
     }
   };
 
