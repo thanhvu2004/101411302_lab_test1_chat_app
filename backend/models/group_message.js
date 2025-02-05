@@ -1,4 +1,4 @@
-const mongoose = require('mongoose');
+const mongoose = require("mongoose");
 
 const groupMessageSchema = new mongoose.Schema({
   from_user: { type: String, required: true },

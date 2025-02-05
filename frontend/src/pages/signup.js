@@ -32,48 +32,66 @@ const Signup = () => {
   };
 
   return (
-    <div>
-      <h1>Signup</h1>
-      <form onSubmit={handleSubmit}>
-        <label htmlFor="username">Username</label>
-        <input
-          type="text"
-          id="username"
-          name="username"
-          value={username}
-          onChange={(e) => setUsername(e.target.value)}
-        />
-        <label htmlFor="firstname">First Name</label>
-        <input
-          type="text"
-          id="firstname"
-          name="firstname"
-          value={firstname}
-          onChange={(e) => setFirstname(e.target.value)}
-        />
-        <label htmlFor="lastname">Last Name</label>
-        <input
-          type="text"
-          id="lastname"
-          name="lastname"
-          value={lastname}
-          onChange={(e) => setLastname(e.target.value)}
-        />
-        <label htmlFor="password">Password</label>
-        <input
-          type="password"
-          id="password"
-          name="password"
-          value={password}
-          onChange={(e) => setPassword(e.target.value)}
-        />
-        <button type="submit">Signup</button>
-        <p>
+    <div className="container mt-5">
+      <h1 className="text-center">Signup</h1>
+      <form
+        onSubmit={handleSubmit}
+        className="mx-auto"
+        style={{ maxWidth: "400px" }}
+      >
+        <div className="form-group">
+          <label htmlFor="username">Username</label>
+          <input
+            type="text"
+            className="form-control"
+            id="username"
+            name="username"
+            value={username}
+            onChange={(e) => setUsername(e.target.value)}
+          />
+        </div>
+        <div className="form-group">
+          <label htmlFor="firstname">First Name</label>
+          <input
+            type="text"
+            className="form-control"
+            id="firstname"
+            name="firstname"
+            value={firstname}
+            onChange={(e) => setFirstname(e.target.value)}
+          />
+        </div>
+        <div className="form-group">
+          <label htmlFor="lastname">Last Name</label>
+          <input
+            type="text"
+            className="form-control"
+            id="lastname"
+            name="lastname"
+            value={lastname}
+            onChange={(e) => setLastname(e.target.value)}
+          />
+        </div>
+        <div className="form-group">
+          <label htmlFor="password">Password</label>
+          <input
+            type="password"
+            className="form-control"
+            id="password"
+            name="password"
+            value={password}
+            onChange={(e) => setPassword(e.target.value)}
+          />
+        </div>
+        <button type="submit" className="btn btn-primary btn-block">
+          Signup
+        </button>
+        <p className="mt-3 text-center">
           Already have an account? <Link to="/login">Login here</Link>
         </p>
       </form>
-      {error && <p style={{ color: "red" }}>{error}</p>}
-      {success && <p style={{ color: "green" }}>{success}</p>}
+      {error && <p className="text-danger mt-2 text-center">{error}</p>}
+      {success && <p className="text-success mt-2 text-center">{success}</p>}
     </div>
   );
 };

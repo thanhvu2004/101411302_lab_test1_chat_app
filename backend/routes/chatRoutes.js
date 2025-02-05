@@ -35,12 +35,12 @@ router.get("/private-messages/:sender/:receiver", async (req, res) => {
 router.post("/messages/:room", async (req, res) => {
   try {
     const { room } = req.params;
-    const { sender, message } = req.body;
-    const groupMessage = new GroupMessage({ room, sender, message });
-    await groupMessage.save();
-    res.status(201).json({ message: "Message sent" });
+    const { from_user, message } = req.body;
+    const newMessage = new GroupMessage({ from_user, room, message });
+    await newMessage.save();
+    res.status(201).json(newMessage);
   } catch (error) {
-    res.status(500).json({ message: "Error sending message", error });
+    res.status(500).json({ message: "Error saving message", error });
   }
 });
 
