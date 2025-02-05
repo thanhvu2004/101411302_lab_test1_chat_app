@@ -39,4 +39,17 @@ router.post("/login", async (req, res) => {
   }
 });
 
+// Get User Info Route
+router.get("/me", async (req, res) => {
+  try {
+    const token = req.headers.authorization.split(" ")[1];
+    const decoded = jwt.verify(token, "TEr4iEMv1I");
+    const user = await User.findById(decoded.userId).select("-password");
+    res.json(user);
+  } catch (error) {
+    console.error("Error fetching user:", error);
+    res.status(500).json({ message: "Error fetching user", error });
+  }
+});
+
 module.exports = router;

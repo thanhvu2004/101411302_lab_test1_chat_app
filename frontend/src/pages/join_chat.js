@@ -1,5 +1,6 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
+import { jwtDecode } from "jwt-decode";
 
 const JoinChat = () => {
   const [username, setUsername] = useState("");
@@ -8,6 +9,44 @@ const JoinChat = () => {
   const navigate = useNavigate();
 
   const rooms = ["devops", "cloud computing", "covid19", "sports", "nodeJS"];
+
+  useEffect(() => {
+    const fetchUsername = async () => {
+      const token = localStorage.getItem("token");
+      if (token) {
+        try {
+          const decodedToken = jwtDecode(token);
+          const currentTime = Date.now() / 1000;
+
+          if (decodedToken.exp < currentTime) {
+            // Token is expired
+            localStorage.clear();
+            navigate("/login");
+          } else {
+            const response = await fetch("http://localhost:5000/api/users/me", {
+              method: "GET",
+              headers: {
+                "Content-Type": "application/json",
+                Authorization: `Bearer ${token}`,
+              },
+            });
+            if (response.ok) {
+              const data = await response.json();
+              setUsername(data.username);
+            } else {
+              setError("Failed to fetch username");
+            }
+          }
+        } catch (error) {
+          setError("Failed to fetch username");
+        }
+      } else {
+        navigate("/login");
+      }
+    };
+
+    fetchUsername();
+  }, [navigate]);
 
   const handleSubmit = (event) => {
     event.preventDefault();
@@ -37,6 +76,7 @@ const JoinChat = () => {
             name="username"
             value={username}
             onChange={(e) => setUsername(e.target.value)}
+            readOnly
           />
         </div>
         <div className="form-group">
