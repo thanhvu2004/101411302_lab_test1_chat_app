@@ -21,25 +21,24 @@ const io = socketIo(server, {
   },
 });
 
-// Handle Socket.io connections
+const users = {};
+
 io.on("connection", (socket) => {
   console.log("User connected");
 
   socket.on("joinRoom", ({ username, room }) => {
+    users[socket.id] = username;
     socket.join(room);
     io.to(room).emit("message", {
       user: "System",
-      text: `${username} has joined ${room}`,
-      date_sent: new Date(),
+      text: `${username} has joined`,
+      date_sent: new Date().toISOString(),
     });
   });
 
   socket.on("sendMessage", async ({ username, room, message }) => {
-    io.to(room).emit("message", {
-      user: username,
-      text: message,
-      date_sent: new Date(),
-    });
+    const date_sent = new Date().toISOString();
+    io.to(room).emit("message", { user: username, text: message, date_sent });
   });
 
   socket.on("typing", ({ username, room }) => {
@@ -51,7 +50,14 @@ io.on("connection", (socket) => {
   });
 
   socket.on("disconnect", () => {
+    const username = users[socket.id];
+    delete users[socket.id];
     console.log("User disconnected");
+    io.emit("message", {
+      user: "System",
+      text: `${username} has disconnected`,
+      date_sent: new Date().toISOString(),
+    });
   });
 });
 

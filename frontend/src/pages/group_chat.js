@@ -100,6 +100,22 @@ const GroupChat = () => {
     }, 3000);
   };
 
+  const formatDate = (dateString) => {
+    const date = new Date(dateString);
+    const now = new Date();
+    const diffInMs = now - date;
+    const diffInHours = diffInMs / (1000 * 60 * 60);
+
+    if (diffInHours > 24) {
+      return date.toLocaleString();
+    } else if (diffInHours >= 1) {
+      return `${Math.floor(diffInHours)} hours ago`;
+    } else {
+      const diffInMinutes = diffInMs / (1000 * 60);
+      return `${Math.floor(diffInMinutes)} minutes ago`;
+    }
+  };
+
   return (
     <div className="container mt-5">
       <h1 className="text-center">Group Chat</h1>
@@ -111,9 +127,15 @@ const GroupChat = () => {
         <div className="card-body">
           <div className="messages mb-3">
             {messages.map((msg, index) => (
-              <div key={index} className="message mb-2">
-                <strong>{msg.from_user}</strong>: {msg.message}{" "}
-                <em>{new Date(msg.date_sent).toLocaleString()}</em>
+              <div
+                key={index}
+                className="message mb-2 d-flex justify-content-between"
+              >
+                <div>
+                  <strong>{msg.from_user || msg.user}</strong>:{" "}
+                  {msg.message || msg.text}
+                </div>
+                <em className="text-muted">{formatDate(msg.date_sent)}</em>
               </div>
             ))}
           </div>
