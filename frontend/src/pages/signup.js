@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { Link } from "react-router-dom";
+import { useNavigate, Link } from "react-router-dom";
 import "../css/styles.css";
 
 const Signup = () => {
@@ -9,6 +9,7 @@ const Signup = () => {
   const [password, setPassword] = useState("");
   const [error, setError] = useState("");
   const [success, setSuccess] = useState("");
+  const navigate = useNavigate();
 
   const handleSubmit = async (event) => {
     event.preventDefault();
@@ -25,6 +26,7 @@ const Signup = () => {
 
     if (response.ok) {
       setSuccess("Signup successful!");
+      navigate("/login");
     } else {
       const errorMessage = await response.text();
       setError(errorMessage);
