@@ -2,6 +2,7 @@ import React, { useState, useEffect } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
 import {jwtDecode} from "jwt-decode";
 import io from "socket.io-client";
+import Header from "../components/header";
 
 const socket = io("http://localhost:5000");
 
@@ -151,41 +152,47 @@ const PrivateChat = () => {
   };
 
   return (
-    <div className="container mt-5">
-      <h1 className="text-center">Private Chat</h1>
-      <div className="card">
-        <div className="card-header">
-          <h2>Chat with {privateUsername}</h2>
-        </div>
-        <div className="card-body">
-          <div className="messages mb-3">
-            {messages.map((msg, index) => (
-              <div
-                key={index}
-                className="message mb-2 d-flex justify-content-between"
-              >
-                <div>
-                  <strong>{msg.from_user}</strong>: {msg.message}
-                </div>
-                <em className="text-muted">{formatDate(msg.date_sent)}</em>
-              </div>
-            ))}
-          </div>
-          {typingMessage && <p className="text-muted">{typingMessage}</p>}
-          <form onSubmit={handleSubmit} className="d-flex align-items-center">
-            <input
-              type="text"
-              className="form-control flex-grow-1 mr-2"
-              value={newMessage}
-              onChange={(e) => setNewMessage(e.target.value)}
-              onKeyPress={handleTyping}
-              placeholder="Type your message"
-            />
-            <button type="submit" className="btn btn-primary">
-              Send
+    <div>
+      <Header />
+      <div className="container mt-5">
+        <h1 className="text-center">Private Chat</h1>
+        <div className="card">
+          <div className="card-header d-flex justify-content-between">
+            <h2>Chat with {privateUsername}</h2>
+            <button onClick={() => navigate("/")} className="btn btn-danger">
+              Leave Room
             </button>
-          </form>
-          {error && <p className="text-danger mt-2">{error}</p>}
+          </div>
+          <div className="card-body">
+            <div className="messages mb-3">
+              {messages.map((msg, index) => (
+                <div
+                  key={index}
+                  className="message mb-2 d-flex justify-content-between"
+                >
+                  <div>
+                    <strong>{msg.from_user}</strong>: {msg.message}
+                  </div>
+                  <em className="text-muted">{formatDate(msg.date_sent)}</em>
+                </div>
+              ))}
+            </div>
+            {typingMessage && <p className="text-muted">{typingMessage}</p>}
+            <form onSubmit={handleSubmit} className="d-flex align-items-center">
+              <input
+                type="text"
+                className="form-control flex-grow-1 mr-2"
+                value={newMessage}
+                onChange={(e) => setNewMessage(e.target.value)}
+                onKeyPress={handleTyping}
+                placeholder="Type your message"
+              />
+              <button type="submit" className="btn btn-primary">
+                Send
+              </button>
+            </form>
+            {error && <p className="text-danger mt-2">{error}</p>}
+          </div>
         </div>
       </div>
     </div>

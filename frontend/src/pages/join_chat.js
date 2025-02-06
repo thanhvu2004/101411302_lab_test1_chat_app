@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { jwtDecode } from "jwt-decode";
+import Header from "../components/header";
 
 const JoinChat = () => {
   const [username, setUsername] = useState("");
@@ -68,66 +69,69 @@ const JoinChat = () => {
   };
 
   return (
-    <div className="container mt-5">
-      <h1 className="text-center">Join Chat</h1>
-      <form
-        onSubmit={handleSubmit}
-        className="mx-auto"
-        style={{ maxWidth: "400px" }}
-      >
-        <div className="form-group">
-          <label htmlFor="username">Username</label>
-          <input
-            type="text"
-            className="form-control"
-            id="username"
-            name="username"
-            value={username}
-            onChange={(e) => setUsername(e.target.value)}
-            readOnly
-          />
-        </div>
-        <hr />
-        <div className="form-group">
-          <label htmlFor="room">Join a room</label>
-          <select
-            className="form-control"
-            id="room"
-            name="room"
-            value={room}
-            onChange={(e) => setRoom(e.target.value)}
-            disabled={privateUsername !== ""}
-          >
-            <option value="">Select a room</option>
-            {rooms.map((room, index) => (
-              <option key={index} value={room}>
-                {room}
-              </option>
-            ))}
-          </select>
-        </div>
-        <hr />
-        <p className="text-center">Or</p>
-        <div className="form-group">
-          <label htmlFor="privateUsername">
-            Join a private chat with a user
-          </label>
-          <input
-            type="text"
-            className="form-control"
-            id="privateUsername"
-            name="privateUsername"
-            value={privateUsername}
-            placeholder="Enter a username"
-            onChange={(e) => setPrivateUsername(e.target.value)}
-            disabled={room !== ""}
-          />
-        </div>
-        <button type="submit" className="btn btn-primary btn-block">
-          Join
-        </button>
-      </form>
-      {error && <p className="text-danger mt-2 text-center">{error}</p>}
+    <div>
+      <Header />
+      <div className="container mt-5">
+        <h1 className="text-center">Join Chat</h1>
+        <form
+          onSubmit={handleSubmit}
+          className="mx-auto"
+          style={{ maxWidth: "400px" }}
+        >
+          <div className="form-group">
+            <label htmlFor="username">Username</label>
+            <input
+              type="text"
+              className="form-control"
+              id="username"
+              name="username"
+              value={username}
+              onChange={(e) => setUsername(e.target.value)}
+              readOnly
+            />
+          </div>
+          <hr />
+          <div className="form-group">
+            <label htmlFor="room">Join a room</label>
+            <select
+              className="form-control"
+              id="room"
+              name="room"
+              value={room}
+              onChange={(e) => setRoom(e.target.value)}
+              disabled={privateUsername !== ""}
+            >
+              <option value="">Select a room</option>
+              {rooms.map((room, index) => (
+                <option key={index} value={room}>
+                  {room}
+                </option>
+              ))}
+            </select>
+          </div>
+          <hr />
+          <p className="text-center">Or</p>
+          <div className="form-group">
+            <label htmlFor="privateUsername">
+              Join a private chat with a user
+            </label>
+            <input
+              type="text"
+              className="form-control"
+              id="privateUsername"
+              name="privateUsername"
+              value={privateUsername}
+              placeholder="Enter a username"
+              onChange={(e) => setPrivateUsername(e.target.value)}
+              disabled={room !== ""}
+            />
+          </div>
+          <button type="submit" className="btn btn-primary btn-block">
+            Join
+          </button>
+        </form>
+        {error && <p className="text-danger mt-2 text-center">{error}</p>}
+      </div>
     </div>
   );
 };
