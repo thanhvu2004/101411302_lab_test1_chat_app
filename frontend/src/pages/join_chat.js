@@ -96,6 +96,7 @@ const JoinChat = () => {
             name="room"
             value={room}
             onChange={(e) => setRoom(e.target.value)}
+            disabled={privateUsername !== ""}
           >
             <option value="">Select a room</option>
             {rooms.map((room, index) => (
@@ -105,13 +106,12 @@ const JoinChat = () => {
             ))}
           </select>
         </div>
-        <button type="submit" className="btn btn-primary btn-block">
-          Join
-        </button>
         <hr />
         <p className="text-center">Or</p>
         <div className="form-group">
-          <label htmlFor="privateUsername">Join a private chat to with a user</label>
+          <label htmlFor="privateUsername">
+            Join a private chat with a user
+          </label>
           <input
             type="text"
             className="form-control"
@@ -120,6 +120,7 @@ const JoinChat = () => {
             value={privateUsername}
             placeholder="Enter a username"
             onChange={(e) => setPrivateUsername(e.target.value)}
+            disabled={room !== ""}
           />
         </div>
         <button type="submit" className="btn btn-primary btn-block">

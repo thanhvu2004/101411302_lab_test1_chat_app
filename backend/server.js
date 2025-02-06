@@ -24,8 +24,7 @@ const io = socketIo(server, {
 const users = {};
 
 io.on("connection", (socket) => {
-  console.log("User connected");
-
+  // Group chat
   socket.on("joinRoom", ({ username, room }) => {
     users[socket.id] = username;
     socket.join(room);
@@ -49,6 +48,7 @@ io.on("connection", (socket) => {
     socket.broadcast.to(room).emit("stopTyping", { username });
   });
 
+  // Private chat
   socket.on("joinPrivateChat", ({ username, privateUsername }) => {
     const room = [username, privateUsername].sort().join("-");
     users[socket.id] = username;
@@ -75,7 +75,6 @@ io.on("connection", (socket) => {
   socket.on("disconnect", () => {
     const username = users[socket.id];
     delete users[socket.id];
-    console.log("User disconnected");
     io.emit("message", {
       user: "System",
       text: `${username} has disconnected`,
