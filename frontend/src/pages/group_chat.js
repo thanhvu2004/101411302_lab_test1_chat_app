@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
+import { jwtDecode } from "jwt-decode";
 import io from "socket.io-client";
 
 const socket = io("http://localhost:5000");
@@ -17,7 +18,16 @@ const GroupChat = () => {
 
   useEffect(() => {
     const token = localStorage.getItem("token");
-    if (!token || !username || !room) {
+    if (token) {
+      const decodedToken = jwtDecode(token);
+      const currentTime = Date.now() / 1000;
+
+      if (decodedToken.exp < currentTime) {
+        // Token is expired
+        localStorage.clear();
+        navigate("/login");
+      }
+    } else {
       navigate("/login");
     }
 

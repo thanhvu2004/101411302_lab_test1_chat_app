@@ -49,6 +49,29 @@ io.on("connection", (socket) => {
     socket.broadcast.to(room).emit("stopTyping", { username });
   });
 
+  socket.on("joinPrivateChat", ({ username, privateUsername }) => {
+    const room = [username, privateUsername].sort().join("-");
+    users[socket.id] = username;
+    socket.join(room);
+    io.to(room).emit("userJoined", { username });
+  });
+
+  socket.on("sendPrivateMessage", async ({ from_user, to_user, message }) => {
+    const room = [from_user, to_user].sort().join("-");
+    const date_sent = new Date().toISOString();
+    io.to(room).emit("privateMessage", { from_user, message, date_sent });
+  });
+
+  socket.on("typing", ({ username, privateUsername }) => {
+    const room = [username, privateUsername].sort().join("-");
+    socket.broadcast.to(room).emit("typing", { username });
+  });
+
+  socket.on("stopTyping", ({ username, privateUsername }) => {
+    const room = [username, privateUsername].sort().join("-");
+    socket.broadcast.to(room).emit("stopTyping", { username });
+  });
+
   socket.on("disconnect", () => {
     const username = users[socket.id];
     delete users[socket.id];

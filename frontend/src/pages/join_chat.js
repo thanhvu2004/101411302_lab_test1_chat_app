@@ -5,6 +5,7 @@ import { jwtDecode } from "jwt-decode";
 const JoinChat = () => {
   const [username, setUsername] = useState("");
   const [room, setRoom] = useState("");
+  const [privateUsername, setPrivateUsername] = useState("");
   const [error, setError] = useState("");
   const navigate = useNavigate();
 
@@ -50,13 +51,20 @@ const JoinChat = () => {
 
   const handleSubmit = (event) => {
     event.preventDefault();
-    if (!username || !room) {
-      setError("Please enter a username and select a room.");
+    if (!username || (!room && !privateUsername)) {
+      setError(
+        "Please enter a username and select a room or enter a private username."
+      );
       return;
     }
     setError("");
-    // Redirect to the group chat room
-    navigate("/groupchat", { state: { username, room } });
+    if (room) {
+      // Redirect to the group chat room
+      navigate("/groupchat", { state: { username, room } });
+    } else if (privateUsername) {
+      // Redirect to the private chat
+      navigate("/privatechat", { state: { username, privateUsername } });
+    }
   };
 
   return (
@@ -79,8 +87,9 @@ const JoinChat = () => {
             readOnly
           />
         </div>
+        <hr />
         <div className="form-group">
-          <label htmlFor="room">Room</label>
+          <label htmlFor="room">Join a room</label>
           <select
             className="form-control"
             id="room"
@@ -95,6 +104,23 @@ const JoinChat = () => {
               </option>
             ))}
           </select>
+        </div>
+        <button type="submit" className="btn btn-primary btn-block">
+          Join
+        </button>
+        <hr />
+        <p className="text-center">Or</p>
+        <div className="form-group">
+          <label htmlFor="privateUsername">Join a private chat to with a user</label>
+          <input
+            type="text"
+            className="form-control"
+            id="privateUsername"
+            name="privateUsername"
+            value={privateUsername}
+            placeholder="Enter a username"
+            onChange={(e) => setPrivateUsername(e.target.value)}
+          />
         </div>
         <button type="submit" className="btn btn-primary btn-block">
           Join

@@ -16,13 +16,13 @@ router.get("/messages/:room", async (req, res) => {
 });
 
 // Fetch private messages between two users
-router.get("/private-messages/:sender/:receiver", async (req, res) => {
+router.get("/private-messages/:from_user/:to_user", async (req, res) => {
   try {
-    const { sender, receiver } = req.params;
+    const { from_user, to_user } = req.params;
     const messages = await PrivateMessage.find({
       $or: [
-        { sender, receiver },
-        { sender: receiver, receiver: sender },
+        { from_user, to_user },
+        { from_user: to_user, to_user: from_user },
       ],
     }).sort({ createdAt: 1 });
     res.json(messages);
@@ -47,8 +47,8 @@ router.post("/messages/:room", async (req, res) => {
 // Store private message
 router.post("/private-messages", async (req, res) => {
   try {
-    const { sender, receiver, message } = req.body;
-    const privateMessage = new PrivateMessage({ sender, receiver, message });
+    const { from_user, to_user, message } = req.body;
+    const privateMessage = new PrivateMessage({ from_user, to_user, message });
     await privateMessage.save();
     res.status(201).json({ message: "Message sent" });
   } catch (error) {
